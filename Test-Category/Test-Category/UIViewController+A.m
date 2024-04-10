@@ -9,8 +9,16 @@
 
 @implementation UIViewController (A)
 
++ (void)load {
+    NSLog(@"load A");
+}
+
 + (void)test {
     NSLog(@"A");
+}
+
++ (void)testA {
+    NSLog(@"testA");
 }
 
 @end

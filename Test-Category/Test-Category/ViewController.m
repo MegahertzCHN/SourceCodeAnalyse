@@ -20,6 +20,8 @@
     // Do any additional setup after loading the view.
     
     [ViewController test];
+    [ViewController testA];
+    [ViewController testB];
 }
 
 
