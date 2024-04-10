@@ -167,8 +167,8 @@
 				F7D5FAEA2BC62F3C00B7CCD9 /* ViewController.m in Sources */,
 				F7D5FAE42BC62F3C00B7CCD9 /* AppDelegate.m in Sources */,
 				F7D5FAF52BC62F4200B7CCD9 /* main.m in Sources */,
-				F7269E672BC6335200922A53 /* UIViewController+A.m in Sources */,
 				F7269E6A2BC6335B00922A53 /* UIViewController+B.m in Sources */,
+				F7269E672BC6335200922A53 /* UIViewController+A.m in Sources */,
 				F7D5FAE72BC62F3C00B7CCD9 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
