@@ -1,13 +1,12 @@
 //
 //  ViewController.m
-//  Test-Category
+//  Test-MethodSwizzling
 //
 //  Created by Chill on 2024/4/10.
 //
 
 #import "ViewController.h"
-#import "UIViewController+A.h"
-#import "UIViewController+B.h"
+#import "UIViewController+Analyse.h"
 
 @interface ViewController ()
 
@@ -18,15 +17,15 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
-    [ViewController test];
-    [ViewController testA];
-    [ViewController testB];
 }
 
-- (void)test {
-    NSLog(@"ViewController  --- test");
-}
-
+//- (void)viewWillAppear:(BOOL)animated {
+//    [super zh_ViewWillAppear:animated];
+//    NSLog(@"viewWillAppear %@", self);
+//}
+//
+//- (void)zh_ViewWillAppear:(BOOL)appear {
+//    
+//}
 
 @end

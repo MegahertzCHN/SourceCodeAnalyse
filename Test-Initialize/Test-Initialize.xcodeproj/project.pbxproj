@@ -15,6 +15,8 @@
 		F7269E8B2BC639C300922A53 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F7269E892BC639C300922A53 /* LaunchScreen.storyboard */; };
 		F7269E8E2BC639C300922A53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F7269E8D2BC639C300922A53 /* main.m */; };
 		F7269E962BC639E500922A53 /* ZHObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F7269E952BC639E500922A53 /* ZHObject.m */; };
+		F77F517E2BC8EB8B0031B052 /* UIViewController+A.m in Sources */ = {isa = PBXBuildFile; fileRef = F77F517D2BC8EB8B0031B052 /* UIViewController+A.m */; };
+		F77F51812BC8EB930031B052 /* UIViewController+B.m in Sources */ = {isa = PBXBuildFile; fileRef = F77F51802BC8EB930031B052 /* UIViewController+B.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,10 @@
 		F7269E8D2BC639C300922A53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		F7269E942BC639E500922A53 /* ZHObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZHObject.h; sourceTree = "<group>"; };
 		F7269E952BC639E500922A53 /* ZHObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZHObject.m; sourceTree = "<group>"; };
+		F77F517C2BC8EB8B0031B052 /* UIViewController+A.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+A.h"; sourceTree = "<group>"; };
+		F77F517D2BC8EB8B0031B052 /* UIViewController+A.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+A.m"; sourceTree = "<group>"; };
+		F77F517F2BC8EB930031B052 /* UIViewController+B.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+B.h"; sourceTree = "<group>"; };
+		F77F51802BC8EB930031B052 /* UIViewController+B.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+B.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +83,10 @@
 				F7269E892BC639C300922A53 /* LaunchScreen.storyboard */,
 				F7269E8C2BC639C300922A53 /* Info.plist */,
 				F7269E8D2BC639C300922A53 /* main.m */,
+				F77F517C2BC8EB8B0031B052 /* UIViewController+A.h */,
+				F77F517D2BC8EB8B0031B052 /* UIViewController+A.m */,
+				F77F517F2BC8EB930031B052 /* UIViewController+B.h */,
+				F77F51802BC8EB930031B052 /* UIViewController+B.m */,
 			);
 			path = "Test-Initialize";
 			sourceTree = "<group>";
@@ -155,6 +165,8 @@
 				F7269E7D2BC639C100922A53 /* AppDelegate.m in Sources */,
 				F7269E962BC639E500922A53 /* ZHObject.m in Sources */,
 				F7269E8E2BC639C300922A53 /* main.m in Sources */,
+				F77F517E2BC8EB8B0031B052 /* UIViewController+A.m in Sources */,
+				F77F51812BC8EB930031B052 /* UIViewController+B.m in Sources */,
 				F7269E802BC639C100922A53 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
