@@ -1,0 +1,106 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+import Foundation
+
+class TestObjcClass {
+  @objc func test1()
+  @objc deinit
+  init()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// TestObjcClass.test1()
+sil hidden [ossa] @TestObjcClass.TestObjcClass.test1() -> () : $@convention(method) (@guaranteed TestObjcClass) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $TestObjcClass):
+  debug_value %0 : $TestObjcClass, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'TestObjcClass.TestObjcClass.test1() -> ()'
+
+// @objc TestObjcClass.test1()
+sil private [thunk] [ossa] @@objc TestObjcClass.TestObjcClass.test1() -> () : $@convention(objc_method) (TestObjcClass) -> () {
+// %0                                             // user: %1
+bb0(%0 : @unowned $TestObjcClass):
+  %1 = copy_value %0 : $TestObjcClass             // users: %6, %2
+  %2 = begin_borrow %1 : $TestObjcClass           // users: %5, %4
+  // function_ref TestObjcClass.test1()
+  %3 = function_ref @TestObjcClass.TestObjcClass.test1() -> () : $@convention(method) (@guaranteed TestObjcClass) -> () // user: %4
+  %4 = apply %3(%2) : $@convention(method) (@guaranteed TestObjcClass) -> () // user: %7
+  end_borrow %2 : $TestObjcClass                  // id: %5
+  destroy_value %1 : $TestObjcClass               // id: %6
+  return %4 : $()                                 // id: %7
+} // end sil function '@objc TestObjcClass.TestObjcClass.test1() -> ()'
+
+// TestObjcClass.deinit
+sil hidden [ossa] @TestObjcClass.TestObjcClass.deinit : $@convention(method) (@guaranteed TestObjcClass) -> @owned Builtin.NativeObject {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @guaranteed $TestObjcClass):
+  debug_value %0 : $TestObjcClass, let, name "self", argno 1, implicit // id: %1
+  %2 = unchecked_ref_cast %0 : $TestObjcClass to $Builtin.NativeObject // user: %3
+  %3 = unchecked_ownership_conversion %2 : $Builtin.NativeObject, @guaranteed to @owned // user: %4
+  return %3 : $Builtin.NativeObject               // id: %4
+} // end sil function 'TestObjcClass.TestObjcClass.deinit'
+
+// TestObjcClass.__deallocating_deinit
+sil hidden [ossa] @TestObjcClass.TestObjcClass.__deallocating_deinit : $@convention(method) (@owned TestObjcClass) -> () {
+// %0 "self"                                      // users: %6, %3, %1
+bb0(%0 : @owned $TestObjcClass):
+  debug_value %0 : $TestObjcClass, let, name "self", argno 1, implicit // id: %1
+  // function_ref TestObjcClass.deinit
+  %2 = function_ref @TestObjcClass.TestObjcClass.deinit : $@convention(method) (@guaranteed TestObjcClass) -> @owned Builtin.NativeObject // user: %4
+  %3 = begin_borrow %0 : $TestObjcClass           // users: %5, %4
+  %4 = apply %2(%3) : $@convention(method) (@guaranteed TestObjcClass) -> @owned Builtin.NativeObject // user: %7
+  end_borrow %3 : $TestObjcClass                  // id: %5
+  end_lifetime %0 : $TestObjcClass                // id: %6
+  %7 = unchecked_ref_cast %4 : $Builtin.NativeObject to $TestObjcClass // user: %8
+  dealloc_ref %7 : $TestObjcClass                 // id: %8
+  %9 = tuple ()                                   // user: %10
+  return %9 : $()                                 // id: %10
+} // end sil function 'TestObjcClass.TestObjcClass.__deallocating_deinit'
+
+// TestObjcClass.__allocating_init()
+sil hidden [exact_self_class] [ossa] @TestObjcClass.TestObjcClass.__allocating_init() -> TestObjcClass.TestObjcClass : $@convention(method) (@thick TestObjcClass.Type) -> @owned TestObjcClass {
+// %0 "$metatype"
+bb0(%0 : $@thick TestObjcClass.Type):
+  %1 = alloc_ref $TestObjcClass                   // user: %3
+  // function_ref TestObjcClass.init()
+  %2 = function_ref @TestObjcClass.TestObjcClass.init() -> TestObjcClass.TestObjcClass : $@convention(method) (@owned TestObjcClass) -> @owned TestObjcClass // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@owned TestObjcClass) -> @owned TestObjcClass // user: %4
+  return %3 : $TestObjcClass                      // id: %4
+} // end sil function 'TestObjcClass.TestObjcClass.__allocating_init() -> TestObjcClass.TestObjcClass'
+
+// TestObjcClass.init()
+sil hidden [ossa] @TestObjcClass.TestObjcClass.init() -> TestObjcClass.TestObjcClass : $@convention(method) (@owned TestObjcClass) -> @owned TestObjcClass {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $TestObjcClass):
+  debug_value %0 : $TestObjcClass, let, name "self", argno 1, implicit // id: %1
+  %2 = mark_uninitialized [rootself] %0 : $TestObjcClass // users: %4, %3
+  %3 = copy_value %2 : $TestObjcClass             // user: %5
+  destroy_value %2 : $TestObjcClass               // id: %4
+  return %3 : $TestObjcClass                      // id: %5
+} // end sil function 'TestObjcClass.TestObjcClass.init() -> TestObjcClass.TestObjcClass'
+
+sil_vtable TestObjcClass {
+  #TestObjcClass.test1: (TestObjcClass) -> () -> () : @TestObjcClass.TestObjcClass.test1() -> ()	// TestObjcClass.test1()
+  #TestObjcClass.init!allocator: (TestObjcClass.Type) -> () -> TestObjcClass : @TestObjcClass.TestObjcClass.__allocating_init() -> TestObjcClass.TestObjcClass	// TestObjcClass.__allocating_init()
+  #TestObjcClass.deinit!deallocator: @TestObjcClass.TestObjcClass.__deallocating_deinit	// TestObjcClass.__deallocating_deinit
+}
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'TestObjcClass/TestObjcClass.swift' => 'TestObjcClass.swift'
+
+

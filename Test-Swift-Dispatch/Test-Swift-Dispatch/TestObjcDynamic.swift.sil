@@ -1,0 +1,106 @@
+
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+import Foundation
+
+class TestObjcDynamic {
+  @objc dynamic func test()
+  @objc deinit
+  init()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// TestObjcDynamic.test()
+sil hidden [ossa] @TestObjcDynamic.TestObjcDynamic.test() -> () : $@convention(method) (@guaranteed TestObjcDynamic) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $TestObjcDynamic):
+  debug_value %0 : $TestObjcDynamic, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'TestObjcDynamic.TestObjcDynamic.test() -> ()'
+
+// @objc TestObjcDynamic.test()
+sil private [thunk] [ossa] @@objc TestObjcDynamic.TestObjcDynamic.test() -> () : $@convention(objc_method) (TestObjcDynamic) -> () {
+// %0                                             // user: %1
+bb0(%0 : @unowned $TestObjcDynamic):
+  %1 = copy_value %0 : $TestObjcDynamic           // users: %6, %2
+  %2 = begin_borrow %1 : $TestObjcDynamic         // users: %5, %4
+  // function_ref TestObjcDynamic.test()
+  %3 = function_ref @TestObjcDynamic.TestObjcDynamic.test() -> () : $@convention(method) (@guaranteed TestObjcDynamic) -> () // user: %4
+  %4 = apply %3(%2) : $@convention(method) (@guaranteed TestObjcDynamic) -> () // user: %7
+  end_borrow %2 : $TestObjcDynamic                // id: %5
+  destroy_value %1 : $TestObjcDynamic             // id: %6
+  return %4 : $()                                 // id: %7
+} // end sil function '@objc TestObjcDynamic.TestObjcDynamic.test() -> ()'
+
+// TestObjcDynamic.deinit
+sil hidden [ossa] @TestObjcDynamic.TestObjcDynamic.deinit : $@convention(method) (@guaranteed TestObjcDynamic) -> @owned Builtin.NativeObject {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @guaranteed $TestObjcDynamic):
+  debug_value %0 : $TestObjcDynamic, let, name "self", argno 1, implicit // id: %1
+  %2 = unchecked_ref_cast %0 : $TestObjcDynamic to $Builtin.NativeObject // user: %3
+  %3 = unchecked_ownership_conversion %2 : $Builtin.NativeObject, @guaranteed to @owned // user: %4
+  return %3 : $Builtin.NativeObject               // id: %4
+} // end sil function 'TestObjcDynamic.TestObjcDynamic.deinit'
+
+// TestObjcDynamic.__deallocating_deinit
+sil hidden [ossa] @TestObjcDynamic.TestObjcDynamic.__deallocating_deinit : $@convention(method) (@owned TestObjcDynamic) -> () {
+// %0 "self"                                      // users: %6, %3, %1
+bb0(%0 : @owned $TestObjcDynamic):
+  debug_value %0 : $TestObjcDynamic, let, name "self", argno 1, implicit // id: %1
+  // function_ref TestObjcDynamic.deinit
+  %2 = function_ref @TestObjcDynamic.TestObjcDynamic.deinit : $@convention(method) (@guaranteed TestObjcDynamic) -> @owned Builtin.NativeObject // user: %4
+  %3 = begin_borrow %0 : $TestObjcDynamic         // users: %5, %4
+  %4 = apply %2(%3) : $@convention(method) (@guaranteed TestObjcDynamic) -> @owned Builtin.NativeObject // user: %7
+  end_borrow %3 : $TestObjcDynamic                // id: %5
+  end_lifetime %0 : $TestObjcDynamic              // id: %6
+  %7 = unchecked_ref_cast %4 : $Builtin.NativeObject to $TestObjcDynamic // user: %8
+  dealloc_ref %7 : $TestObjcDynamic               // id: %8
+  %9 = tuple ()                                   // user: %10
+  return %9 : $()                                 // id: %10
+} // end sil function 'TestObjcDynamic.TestObjcDynamic.__deallocating_deinit'
+
+// TestObjcDynamic.__allocating_init()
+sil hidden [exact_self_class] [ossa] @TestObjcDynamic.TestObjcDynamic.__allocating_init() -> TestObjcDynamic.TestObjcDynamic : $@convention(method) (@thick TestObjcDynamic.Type) -> @owned TestObjcDynamic {
+// %0 "$metatype"
+bb0(%0 : $@thick TestObjcDynamic.Type):
+  %1 = alloc_ref $TestObjcDynamic                 // user: %3
+  // function_ref TestObjcDynamic.init()
+  %2 = function_ref @TestObjcDynamic.TestObjcDynamic.init() -> TestObjcDynamic.TestObjcDynamic : $@convention(method) (@owned TestObjcDynamic) -> @owned TestObjcDynamic // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@owned TestObjcDynamic) -> @owned TestObjcDynamic // user: %4
+  return %3 : $TestObjcDynamic                    // id: %4
+} // end sil function 'TestObjcDynamic.TestObjcDynamic.__allocating_init() -> TestObjcDynamic.TestObjcDynamic'
+
+// TestObjcDynamic.init()
+sil hidden [ossa] @TestObjcDynamic.TestObjcDynamic.init() -> TestObjcDynamic.TestObjcDynamic : $@convention(method) (@owned TestObjcDynamic) -> @owned TestObjcDynamic {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $TestObjcDynamic):
+  debug_value %0 : $TestObjcDynamic, let, name "self", argno 1, implicit // id: %1
+  %2 = mark_uninitialized [rootself] %0 : $TestObjcDynamic // users: %4, %3
+  %3 = copy_value %2 : $TestObjcDynamic           // user: %5
+  destroy_value %2 : $TestObjcDynamic             // id: %4
+  return %3 : $TestObjcDynamic                    // id: %5
+} // end sil function 'TestObjcDynamic.TestObjcDynamic.init() -> TestObjcDynamic.TestObjcDynamic'
+
+sil_vtable TestObjcDynamic {
+  #TestObjcDynamic.init!allocator: (TestObjcDynamic.Type) -> () -> TestObjcDynamic : @TestObjcDynamic.TestObjcDynamic.__allocating_init() -> TestObjcDynamic.TestObjcDynamic	// TestObjcDynamic.__allocating_init()
+  #TestObjcDynamic.deinit!deallocator: @TestObjcDynamic.TestObjcDynamic.__deallocating_deinit	// TestObjcDynamic.__deallocating_deinit
+}
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'TestObjcDynamic/TestObjcDynamic.swift' => 'TestObjcDynamic.swift'
+
+
