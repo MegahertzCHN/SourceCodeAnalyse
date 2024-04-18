@@ -1,0 +1,154 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+import Foundation
+
+protocol MyProtocol {
+  func test()
+}
+
+class AProtocolClass : MyProtocol {
+  func test()
+  @objc deinit
+  init()
+}
+
+struct AProtocolStruct : MyProtocol {
+  func test()
+  init()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// AProtocolClass.test()
+sil hidden [ossa] @testProtocol.AProtocolClass.test() -> () : $@convention(method) (@guaranteed AProtocolClass) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : @guaranteed $AProtocolClass):
+  debug_value %0 : $AProtocolClass, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'testProtocol.AProtocolClass.test() -> ()'
+
+// AProtocolClass.deinit
+sil hidden [ossa] @testProtocol.AProtocolClass.deinit : $@convention(method) (@guaranteed AProtocolClass) -> @owned Builtin.NativeObject {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @guaranteed $AProtocolClass):
+  debug_value %0 : $AProtocolClass, let, name "self", argno 1, implicit // id: %1
+  %2 = unchecked_ref_cast %0 : $AProtocolClass to $Builtin.NativeObject // user: %3
+  %3 = unchecked_ownership_conversion %2 : $Builtin.NativeObject, @guaranteed to @owned // user: %4
+  return %3 : $Builtin.NativeObject               // id: %4
+} // end sil function 'testProtocol.AProtocolClass.deinit'
+
+// AProtocolClass.__deallocating_deinit
+sil hidden [ossa] @testProtocol.AProtocolClass.__deallocating_deinit : $@convention(method) (@owned AProtocolClass) -> () {
+// %0 "self"                                      // users: %6, %3, %1
+bb0(%0 : @owned $AProtocolClass):
+  debug_value %0 : $AProtocolClass, let, name "self", argno 1, implicit // id: %1
+  // function_ref AProtocolClass.deinit
+  %2 = function_ref @testProtocol.AProtocolClass.deinit : $@convention(method) (@guaranteed AProtocolClass) -> @owned Builtin.NativeObject // user: %4
+  %3 = begin_borrow %0 : $AProtocolClass          // users: %5, %4
+  %4 = apply %2(%3) : $@convention(method) (@guaranteed AProtocolClass) -> @owned Builtin.NativeObject // user: %7
+  end_borrow %3 : $AProtocolClass                 // id: %5
+  end_lifetime %0 : $AProtocolClass               // id: %6
+  %7 = unchecked_ref_cast %4 : $Builtin.NativeObject to $AProtocolClass // user: %8
+  dealloc_ref %7 : $AProtocolClass                // id: %8
+  %9 = tuple ()                                   // user: %10
+  return %9 : $()                                 // id: %10
+} // end sil function 'testProtocol.AProtocolClass.__deallocating_deinit'
+
+// AProtocolClass.__allocating_init()
+sil hidden [exact_self_class] [ossa] @testProtocol.AProtocolClass.__allocating_init() -> testProtocol.AProtocolClass : $@convention(method) (@thick AProtocolClass.Type) -> @owned AProtocolClass {
+// %0 "$metatype"
+bb0(%0 : $@thick AProtocolClass.Type):
+  %1 = alloc_ref $AProtocolClass                  // user: %3
+  // function_ref AProtocolClass.init()
+  %2 = function_ref @testProtocol.AProtocolClass.init() -> testProtocol.AProtocolClass : $@convention(method) (@owned AProtocolClass) -> @owned AProtocolClass // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@owned AProtocolClass) -> @owned AProtocolClass // user: %4
+  return %3 : $AProtocolClass                     // id: %4
+} // end sil function 'testProtocol.AProtocolClass.__allocating_init() -> testProtocol.AProtocolClass'
+
+// AProtocolClass.init()
+sil hidden [ossa] @testProtocol.AProtocolClass.init() -> testProtocol.AProtocolClass : $@convention(method) (@owned AProtocolClass) -> @owned AProtocolClass {
+// %0 "self"                                      // users: %2, %1
+bb0(%0 : @owned $AProtocolClass):
+  debug_value %0 : $AProtocolClass, let, name "self", argno 1, implicit // id: %1
+  %2 = mark_uninitialized [rootself] %0 : $AProtocolClass // users: %4, %3
+  %3 = copy_value %2 : $AProtocolClass            // user: %5
+  destroy_value %2 : $AProtocolClass              // id: %4
+  return %3 : $AProtocolClass                     // id: %5
+} // end sil function 'testProtocol.AProtocolClass.init() -> testProtocol.AProtocolClass'
+
+// protocol witness for MyProtocol.test() in conformance AProtocolClass
+sil private [transparent] [thunk] [ossa] @protocol witness for testProtocol.MyProtocol.test() -> () in conformance testProtocol.AProtocolClass : testProtocol.MyProtocol in testProtocol : $@convention(witness_method: MyProtocol) (@in_guaranteed AProtocolClass) -> () {
+// %0                                             // user: %1
+bb0(%0 : $*AProtocolClass):
+  %1 = load_borrow %0 : $*AProtocolClass          // users: %5, %3, %2
+  %2 = class_method %1 : $AProtocolClass, #AProtocolClass.test : (AProtocolClass) -> () -> (), $@convention(method) (@guaranteed AProtocolClass) -> () // user: %3
+  %3 = apply %2(%1) : $@convention(method) (@guaranteed AProtocolClass) -> ()
+  %4 = tuple ()                                   // user: %6
+  end_borrow %1 : $AProtocolClass                 // id: %5
+  return %4 : $()                                 // id: %6
+} // end sil function 'protocol witness for testProtocol.MyProtocol.test() -> () in conformance testProtocol.AProtocolClass : testProtocol.MyProtocol in testProtocol'
+
+// AProtocolStruct.test()
+sil hidden [ossa] @testProtocol.AProtocolStruct.test() -> () : $@convention(method) (AProtocolStruct) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : $AProtocolStruct):
+  debug_value %0 : $AProtocolStruct, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function 'testProtocol.AProtocolStruct.test() -> ()'
+
+// AProtocolStruct.init()
+sil hidden [ossa] @testProtocol.AProtocolStruct.init() -> testProtocol.AProtocolStruct : $@convention(method) (@thin AProtocolStruct.Type) -> AProtocolStruct {
+// %0 "$metatype"
+bb0(%0 : $@thin AProtocolStruct.Type):
+  %1 = alloc_box ${ var AProtocolStruct }, var, name "self" // user: %2
+  %2 = mark_uninitialized [rootself] %1 : ${ var AProtocolStruct } // users: %5, %3
+  %3 = project_box %2 : ${ var AProtocolStruct }, 0 // user: %4
+  %4 = load [trivial] %3 : $*AProtocolStruct      // user: %6
+  destroy_value %2 : ${ var AProtocolStruct }     // id: %5
+  return %4 : $AProtocolStruct                    // id: %6
+} // end sil function 'testProtocol.AProtocolStruct.init() -> testProtocol.AProtocolStruct'
+
+// protocol witness for MyProtocol.test() in conformance AProtocolStruct
+sil private [transparent] [thunk] [ossa] @protocol witness for testProtocol.MyProtocol.test() -> () in conformance testProtocol.AProtocolStruct : testProtocol.MyProtocol in testProtocol : $@convention(witness_method: MyProtocol) (@in_guaranteed AProtocolStruct) -> () {
+// %0                                             // user: %1
+bb0(%0 : $*AProtocolStruct):
+  %1 = load [trivial] %0 : $*AProtocolStruct      // user: %3
+  // function_ref AProtocolStruct.test()
+  %2 = function_ref @testProtocol.AProtocolStruct.test() -> () : $@convention(method) (AProtocolStruct) -> () // user: %3
+  %3 = apply %2(%1) : $@convention(method) (AProtocolStruct) -> ()
+  %4 = tuple ()                                   // user: %5
+  return %4 : $()                                 // id: %5
+} // end sil function 'protocol witness for testProtocol.MyProtocol.test() -> () in conformance testProtocol.AProtocolStruct : testProtocol.MyProtocol in testProtocol'
+
+sil_vtable AProtocolClass {
+  #AProtocolClass.test: (AProtocolClass) -> () -> () : @testProtocol.AProtocolClass.test() -> ()	// AProtocolClass.test()
+  #AProtocolClass.init!allocator: (AProtocolClass.Type) -> () -> AProtocolClass : @testProtocol.AProtocolClass.__allocating_init() -> testProtocol.AProtocolClass	// AProtocolClass.__allocating_init()
+  #AProtocolClass.deinit!deallocator: @testProtocol.AProtocolClass.__deallocating_deinit	// AProtocolClass.__deallocating_deinit
+}
+
+sil_witness_table hidden AProtocolClass: MyProtocol module testProtocol {
+  method #MyProtocol.test: <Self where Self : MyProtocol> (Self) -> () -> () : @protocol witness for testProtocol.MyProtocol.test() -> () in conformance testProtocol.AProtocolClass : testProtocol.MyProtocol in testProtocol	// protocol witness for MyProtocol.test() in conformance AProtocolClass
+}
+
+sil_witness_table hidden AProtocolStruct: MyProtocol module testProtocol {
+  method #MyProtocol.test: <Self where Self : MyProtocol> (Self) -> () -> () : @protocol witness for testProtocol.MyProtocol.test() -> () in conformance testProtocol.AProtocolStruct : testProtocol.MyProtocol in testProtocol	// protocol witness for MyProtocol.test() in conformance AProtocolStruct
+}
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'testProtocol/testProtocol.swift' => 'testProtocol.swift'
+
+

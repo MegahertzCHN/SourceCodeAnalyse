@@ -1,0 +1,48 @@
+sil_stage raw
+
+import Builtin
+import Swift
+import SwiftShims
+
+import Foundation
+
+struct TestStruct {
+  func structTest()
+  init()
+}
+
+// main
+sil [ossa] @main : $@convention(c) (Int32, UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>) -> Int32 {
+bb0(%0 : $Int32, %1 : $UnsafeMutablePointer<Optional<UnsafeMutablePointer<Int8>>>):
+  %2 = integer_literal $Builtin.Int32, 0          // user: %3
+  %3 = struct $Int32 (%2 : $Builtin.Int32)        // user: %4
+  return %3 : $Int32                              // id: %4
+} // end sil function 'main'
+
+// TestStruct.structTest()
+sil hidden [ossa] @$s10testStruct04TestB0V06structC0yyF : $@convention(method) (TestStruct) -> () {
+// %0 "self"                                      // user: %1
+bb0(%0 : $TestStruct):
+  debug_value %0 : $TestStruct, let, name "self", argno 1, implicit // id: %1
+  %2 = tuple ()                                   // user: %3
+  return %2 : $()                                 // id: %3
+} // end sil function '$s10testStruct04TestB0V06structC0yyF'
+
+// TestStruct.init()
+sil hidden [ossa] @$s10testStruct04TestB0VACycfC : $@convention(method) (@thin TestStruct.Type) -> TestStruct {
+// %0 "$metatype"
+bb0(%0 : $@thin TestStruct.Type):
+  %1 = alloc_box ${ var TestStruct }, var, name "self" // user: %2
+  %2 = mark_uninitialized [rootself] %1 : ${ var TestStruct } // users: %5, %3
+  %3 = project_box %2 : ${ var TestStruct }, 0    // user: %4
+  %4 = load [trivial] %3 : $*TestStruct           // user: %6
+  destroy_value %2 : ${ var TestStruct }          // id: %5
+  return %4 : $TestStruct                         // id: %6
+} // end sil function '$s10testStruct04TestB0VACycfC'
+
+
+
+// Mappings from '#fileID' to '#filePath':
+//   'testStruct/testStruct.swift' => 'testStruct.swift'
+
+
